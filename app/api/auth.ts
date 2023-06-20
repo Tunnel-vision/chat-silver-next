@@ -9,7 +9,7 @@ const key = serverConfig.Key;
 function decrypt(encryptedText: any) {
   const decryptedText = CryptoJS.AES.decrypt(
     encryptedText,
-    CryptoJS.enc.Utf8.parse(key),
+    CryptoJS.enc.Utf8.parse(key as string),
     {
       mode: CryptoJS.mode.ECB,
       padding: CryptoJS.pad.Pkcs7,
@@ -104,18 +104,19 @@ export async function auth(req: NextRequest) {
     console.log("code---->1", code);
     // console.log('data----->2',data)
     const apiKey = serverConfig.apiKey;
-    if (code === 0 || true) {
-      const encryptedText = data.key;
-      console.log("data", data.model);
-      const modelText = data.model;
-      console.log("---->encryptedText", encryptedText);
-      const decryptedText = decrypt(encryptedText);
-      console.log("Decrypted text:", decryptedText);
-      req.headers.set("Authorization", `Bearer ${decryptedText}`);
-      // req.headers.set("Authorization", `Bearer ${apiKey}`);
-    } else {
-      req.headers.set("Authorization", `Bearer ${apiKey}`);
-    }
+    // if(code === 0  ){
+    //   const encryptedText = data.key;
+    //   console.log('data', data.model);
+    //   const modelText = data.model
+    //   console.log('---->encryptedText',encryptedText)
+    //   const decryptedText = decrypt(encryptedText);
+    //   console.log("Decrypted text:", decryptedText);
+    //   req.headers.set("Authorization", `Bearer ${decryptedText}`);
+    //   // req.headers.set("Authorization", `Bearer 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`);
+    //   // req.headers.set("Authorization", `Bearer ${apiKey}`);
+    // }else{
+    //   req.headers.set("Authorization", `Bearer ${apiKey}`);
+    // }
     if (apiKey) {
       console.log("[Auth] use system api key");
       req.headers.set("Authorization", `Bearer ${apiKey}`);
