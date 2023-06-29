@@ -9,6 +9,7 @@ import { getClientConfig } from "../config/client";
 export interface AccessControlStore {
   accessCode: string;
   token: string;
+  user: string;
 
   needCode: boolean;
   hideUserApiKey: boolean;
@@ -16,6 +17,7 @@ export interface AccessControlStore {
 
   updateToken: (_: string) => void;
   updateCode: (_: string) => void;
+  updateUser: (_: string) => void;
   updateOpenAiUrl: (_: string) => void;
   enabledAccessControl: () => boolean;
   isAuthorized: () => boolean;
@@ -32,6 +34,7 @@ export const useAccessStore = create<AccessControlStore>()(
   persist(
     (set, get) => ({
       token: "",
+      user: "",
       accessCode: "",
       needCode: true,
       hideUserApiKey: false,
@@ -44,6 +47,9 @@ export const useAccessStore = create<AccessControlStore>()(
       },
       updateCode(code: string) {
         set(() => ({ accessCode: code }));
+      },
+      updateUser(user: string) {
+        set(() => ({ user: user }));
       },
       updateToken(token: string) {
         set(() => ({ token }));

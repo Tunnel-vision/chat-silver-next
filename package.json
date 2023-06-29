@@ -16,14 +16,17 @@
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.1.4",
     "@fortaine/fetch-event-source": "^3.0.6",
     "@hello-pangea/dnd": "^16.2.0",
     "@svgr/webpack": "^6.5.1",
     "@vercel/analytics": "^0.1.11",
+    "antd": "^5.6.3",
     "crypto-js": "^4.1.1",
     "emoji-picker-react": "^4.4.7",
     "fuse.js": "^6.6.2",
     "html-to-image": "^1.11.11",
+    "js-cookie": "^3.0.5",
     "mermaid": "^10.2.3",
     "next": "^13.4.3",
     "node-fetch": "^3.3.1",
@@ -38,12 +41,14 @@
     "remark-math": "^5.1.1",
     "sass": "^1.59.2",
     "spark-md5": "^3.0.2",
+    "styled-components": "^6.0.1",
     "use-debounce": "^9.0.4",
     "zustand": "^4.3.6"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.3.1",
     "@types/crypto-js": "^4.1.1",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^20.3.1",
     "@types/react": "^18.0.28",
     "@types/react-dom": "^18.0.11",

@@ -56,6 +56,10 @@ if (mode !== "export") {
         source: "/sharegpt",
         destination: "https://sharegpt.com/api/conversations",
       },
+      {
+        source: '/backend/:path*',
+        destination: "https://dev.chat.chinagreentownai.com/backend/:path*"
+      },
     ];
 
     const apiUrl = process.env.API_URL;

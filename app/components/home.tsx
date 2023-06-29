@@ -20,11 +20,13 @@ import {
   Routes,
   Route,
   useLocation,
+  Navigate,
 } from "react-router-dom";
 import { SideBar } from "./sidebar";
 import { useAppConfig } from "../store/config";
 import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
+import { useAccessStore } from "../store/access";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -48,6 +50,14 @@ const NewChat = dynamic(async () => (await import("./new-chat")).NewChat, {
 });
 
 const MaskPage = dynamic(async () => (await import("./mask")).MaskPage, {
+  loading: () => <Loading noLogo />,
+});
+
+const LoginPage = dynamic(async () => (await import("./login")).LoginPage, {
+  loading: () => <Loading noLogo />,
+});
+
+const ResetPage = dynamic(async () => (await import("./reset")).ResetPage, {
   loading: () => <Loading noLogo />,
 });
 
@@ -105,6 +115,20 @@ const loadAsyncGoogleFont = () => {
   document.head.appendChild(linkEl);
 };
 
+function RequireAuth({ children }: { children: any }) {
+  const access = useAccessStore();
+  let location = useLocation();
+  if (!access?.user && !localStorage.getItem("user")) {
+    // Redirect them to the /login page, but save the current location they were
+    // trying to go to when they were redirected. This allows us to send them
+    // along to that page after they login, which is a nicer user experience
+    // than dropping them off on the home page.
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return children;
+}
+
 function Screen() {
   const config = useAppConfig();
   const location = useLocation();
@@ -119,33 +143,82 @@ function Screen() {
   return (
     <div
       className={
-        styles.container +
-        ` ${
-          config.tightBorder && !isMobileScreen
-            ? styles["tight-container"]
-            : styles.container
-        }`
+        ![Path.Login, Path.Reset].includes(location.pathname as Path)
+          ? styles.container +
+            ` ${
+              config.tightBorder && !isMobileScreen
+                ? styles["tight-container"]
+                : styles.container
+            }`
+          : ""
       }
     >
-      {isAuth ? (
+      {![Path.Login, Path.Reset].includes(location.pathname as Path) ? (
+        <SideBar className={isHome ? styles["sidebar-show"] : ""} />
+      ) : null}
+
+      <div
+        className={
+          ![Path.Login, Path.Reset].includes(location.pathname as Path)
+            ? styles["window-content"]
+            : ""
+        }
+        id={SlotID.AppBody}
+      >
+        <Routes>
+          <Route
+            path={Path.Home}
+            element={
+              <RequireAuth>
+                <Chat />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={Path.NewChat}
+            element={
+              <RequireAuth>
+                <NewChat />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={Path.Masks}
+            element={
+              <RequireAuth>
+                <MaskPage />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={Path.Chat}
+            element={
+              <RequireAuth>
+                <Chat />
+              </RequireAuth>
+            }
+          />
+          <Route
+            path={Path.Settings}
+            element={
+              <RequireAuth>
+                <Settings />
+              </RequireAuth>
+            }
+          />
+          <Route path={Path.Login} element={<LoginPage />} />
+          <Route path={Path.Reset} element={<ResetPage />} />
+          <Route path={"/healthCheck"} element={<div>hello world</div>} />
+        </Routes>
+      </div>
+
+      {/* {isAuth ? (
         <>
           <AuthPage />
         </>
       ) : (
-        <>
-          <SideBar className={isHome ? styles["sidebar-show"] : ""} />
-
-          <div className={styles["window-content"]} id={SlotID.AppBody}>
-            <Routes>
-              <Route path={Path.Home} element={<Chat />} />
-              <Route path={Path.NewChat} element={<NewChat />} />
-              <Route path={Path.Masks} element={<MaskPage />} />
-              <Route path={Path.Chat} element={<Chat />} />
-              <Route path={Path.Settings} element={<Settings />} />
-            </Routes>
-          </div>
-        </>
-      )}
+       <></>
+      )} */}
     </div>
   );
 }
