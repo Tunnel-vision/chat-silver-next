@@ -1,6 +1,10 @@
 "use client";
 import React, { SyntheticEvent, useState } from "react";
-import { Form, Input, Button, message, Space } from "antd";
+import { message } from "antd";
+import Form from "antd/es/form";
+import Input from "antd/es/input";
+import Button from "antd/es/button";
+import Space from "antd/es/space";
 import { useLocation } from "react-router-dom";
 // import useModelContext from "../../models";
 import styled from "styled-components";
