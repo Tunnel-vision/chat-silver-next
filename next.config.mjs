@@ -58,7 +58,7 @@ if (mode !== "export") {
       },
       {
         source: '/backend/:path*',
-        destination: "https://dev.chat.chinagreentownai.com/backend/:path*"
+        destination: "https://backend.chat.chinagreentownai.com/backend/:path*"
       },
     ];
 
